@@ -7,12 +7,14 @@
     SubShader
     {
         Tags { "RenderType"="Opaque" }
+        // Level of details 层次细节
         LOD 100
 
         Pass
         {
             CGPROGRAM
             #pragma vertex vert
+            //Vertext Shader 处理是在 vert 方法中进行的
             #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
