@@ -29,6 +29,7 @@ public abstract class MasterBehaviour : MonoBehaviour
 
     public void UnregisterAll()
     {
-        
+        mUnRegisterEventActions.ForEach(action => action());
+        mUnRegisterEventActions.Clear();
     }
 }
