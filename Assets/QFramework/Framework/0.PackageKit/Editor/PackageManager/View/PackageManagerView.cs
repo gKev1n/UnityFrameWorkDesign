@@ -10,7 +10,7 @@ namespace QFramework.PackageKit
     [PackageKitRenderOrder(1)]
     public class PackageManagerView : QFramework.IPackageKitView
     {
-        PackageManagerApp mPackageManagerApp = new PackageManagerApp();
+        PackageManagerConfig mPackageManagerConfig = new PackageManagerConfig();
 
         private Vector2 mScrollPos;
 
@@ -26,7 +26,6 @@ namespace QFramework.PackageKit
         private VerticalLayout mRootLayout = new VerticalLayout();
 
         private ToolbarView mCategoriesSelectorView = null;
-        private ToolbarView mAccessRightView = null;
 
         public List<string> Categories
         {
@@ -51,7 +50,7 @@ namespace QFramework.PackageKit
         {
             Container = container;
 
-            PackageManagerApp.Send<PackageManagerInitCommand>();
+            PackageManagerConfig.SendCommand<PackageManagerInitCommand>();
 
             mRootLayout = new VerticalLayout();
 
@@ -72,11 +71,11 @@ namespace QFramework.PackageKit
                     .Do(search =>
                     {
                         search.Content
-                            .Bind(key => { PackageManagerApp.Send(new SearchCommand(key)); }).AddTo(mDisposableList);
+                            .Bind(key => { PackageManagerConfig.SendCommand(new SearchCommand(key)); }).AddTo(mDisposableList);
                     })
             );
 
-            mAccessRightView = new ToolbarView()
+            new ToolbarView()
                 .Menus(new List<string>()
                     {"all", PackageAccessRight.Public.ToString(), PackageAccessRight.Private.ToString()})
                 .AddTo(verticalLayout)
@@ -85,7 +84,7 @@ namespace QFramework.PackageKit
                     self.Index.Bind(value =>
                     {
                         PackageManagerState.AccessRightIndex.Value = value;
-                        PackageManagerApp.Send(new SearchCommand(PackageManagerState.SearchKey.Value));
+                        PackageManagerConfig.SendCommand(new SearchCommand(PackageManagerState.SearchKey.Value));
                     }).AddTo(mDisposableList);
                 });
 
@@ -96,7 +95,7 @@ namespace QFramework.PackageKit
                     self.Index.Bind(value =>
                     {
                         PackageManagerState.CategoryIndex.Value = value;
-                        PackageManagerApp.Send(new SearchCommand(PackageManagerState.SearchKey.Value));
+                        PackageManagerConfig.SendCommand(new SearchCommand(PackageManagerState.SearchKey.Value));
                     }).AddTo(mDisposableList);
                 });
 
@@ -146,8 +145,8 @@ namespace QFramework.PackageKit
             mDisposableList.Dispose();
             mDisposableList = null;
             mCategoriesSelectorView = null;
-            mPackageManagerApp.Dispose();
-            mPackageManagerApp = null;
+            mPackageManagerConfig.Dispose();
+            mPackageManagerConfig = null;
         }
 
 
